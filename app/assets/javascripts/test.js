@@ -220,58 +220,7 @@ to the current one.\n\
 
         item = new DlMenuItem({ parent: submenu, label: "Default from ymacs.css" });
         item.addEventListener("onSelect", function(){
-                ymacs.getActiveFrame().setStyle({ fontFamily: "" });
-        });
-
-        submenu.addSeparator();
-
-        [
-                "Lucida Sans Typewriter",
-                "Andale Mono",
-                "Courier New",
-                "Arial",
-                "Verdana",
-                "Tahoma",
-                "Georgia",
-                "Times New Roman"
-
-        ].foreach(function(font){
-                item = new DlMenuItem({ parent: submenu, label: "<span style='font-family:" + font + "'>" + font + "</span>" });
-                item.addEventListener("onSelect", function(){
-                        ymacs.getActiveFrame().setStyle({ fontFamily: font });
-                });
-        });
-
-        // ymacs.getActiveFrame().setStyle({ fontFamily: "Arial", fontSize: "18px" });
-
-        /* -----[ font size ]----- */
-
-        var item = new DlMenuItem({ parent: menu, label: "Font size".makeLabel() });
-        var submenu = new DlVMenu({});
-        item.setMenu(submenu);
-
-        item = new DlMenuItem({ parent: submenu, label: "Default from ymacs.css" });
-        item.addEventListener("onSelect", function(){
-                ymacs.getActiveFrame().setStyle({ fontSize: "" });
-        });
-
-        submenu.addSeparator();
-
-        [
-                "11px",
-                "12px",
-                "14px",
-                "16px",
-                "18px",
-                "20px",
-                "22px",
-                "24px"
-
-        ].foreach(function(font){
-                item = new DlMenuItem({ parent: submenu, label: "<span style='font-size:" + font + "'>" + font + "</span>" });
-                item.addEventListener("onSelect", function(){
-                        ymacs.getActiveFrame().setStyle({ fontSize: font });
-                });
+            ymacs.getActiveFrame().setStyle({ fontFamily: "" });
         });
 
         layout.packWidget(menu, { pos: "top" });
@@ -311,4 +260,5 @@ if (!is_gecko && !is_khtml) (function(){
 
 })();
     ymacs.setColorTheme([ "dark", "billw" ]);
+    ymacs.getActiveFrame().setStyle({ fontFamily: "Andale Mono", fontSize: "14px" });
 });
