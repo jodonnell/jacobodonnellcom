@@ -14,5 +14,4 @@
 //= require jquery_ujs
 //= require dynarchlib
 //= require ymacs.min
-//= require ymacs-mode-ruby
 //= require test
