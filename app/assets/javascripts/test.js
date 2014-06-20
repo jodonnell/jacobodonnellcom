@@ -37,7 +37,7 @@ $(document).ready(function() {
 
     try {
         var dlg = new DlDialog({ title: "Ymacs", resizable: true });
-        var javascript = new Ymacs_Buffer({ name: "test.js" });
+        var javascript = new Ymacs_Buffer({ name: "consultant.js" });
 
         javascript.setCode("\
 // Jacob O'Donnell Consulting\n\
@@ -54,7 +54,6 @@ function Consultant() {\n\
         javascript.cmd("javascript_dl_mode");
         javascript.setq("indent_level", 4);
 
-
         var keys = new Ymacs_Buffer({ name: "keybindings.txt" });
         keys.setCode(info);
 
@@ -64,33 +63,16 @@ function Consultant() {\n\
         var ymacs = window.ymacs = new Ymacs({ buffers: [ javascript, empty ] });
         ymacs.setColorTheme([ "dark", "billw" ]);
         ymacs.getActiveFrame().setStyle({ fontFamily: "Andale Mono", fontSize: "14px" });
+        
         try {
             ymacs.getActiveBuffer().cmd("eval_file", ".ymacs");
         } catch(ex) {}
 
-        var menu = new DlHMenu({});
-        menu.setStyle({ marginLeft: 0, marginRight: 0 });
 
-        var item = new DlMenuItem({ parent: menu, label: "Set indentation level".makeLabel() });
-        item.addEventListener("onSelect", function() {
-            var buf = ymacs.getActiveBuffer(), newIndent;
-            newIndent = prompt("Indentation level for the current buffer: ", buf.getq("indent_level"));
-            if (newIndent != null)
-                newIndent = parseInt(newIndent, 10);
-            if (newIndent != null && !isNaN(newIndent)) {
-                buf.setq("indent_level", newIndent);
-                buf.signalInfo("Done setting indentation level to " + newIndent);
-            }
-        });
+        try {
+            ymacs.getActiveBuffer().cmd("toggle_line_numbers"); // causes an error
+        } catch(a) {}
 
-        menu.addFiller();
-
-        var item = new DlMenuItem({ parent: menu, label: "Toggle line numbers".makeLabel() });
-        item.addEventListener("onSelect", function() {
-            ymacs.getActiveBuffer().cmd("toggle_line_numbers");
-        });
-
-        layout.packWidget(menu, { pos: "top" });
         layout.packWidget(ymacs, { pos: "bottom", fill: "*" });
 
         dlg._focusedWidget = ymacs;
@@ -103,7 +85,7 @@ function Consultant() {\n\
         dlg.maximize(true);
 
     } catch(ex) {
-        console.log(ex);
+        //console.log(ex);
     }
 
     DynarchDomUtils.trash(document.getElementById("x-loading"));
@@ -126,4 +108,18 @@ function Consultant() {\n\
         dlg.show(true);
 
     })();
+
+    function simulateKeyPress(character) {
+        jQuery.event.trigger({ type : 'keypress', which : character.charCodeAt(0) });
+    }
+
+    setTimeout(function () {
+        var event = document.createEvent("Event");
+        //event.initKeyboardEvent("keypress", true, true, 69, false, false, false, false, 69, 0);
+        event.charCode = 69;
+        //ymacs.getActiveFrame()._on_keyPress(event);
+        //ymacs.getActiveBuffer()._handleKeyEvent({charCode: 69, ctrlKey: false, altKey: false, shiftKey: false});
+        ymacs.getActiveBuffer()._handleKeyEvent(event);
+
+    }, 1000);    
 });
