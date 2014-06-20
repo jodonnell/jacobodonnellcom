@@ -43,11 +43,11 @@ try {
         var dlg = new DlDialog({ title: "Ymacs", resizable: true });
         var javascript = new Ymacs_Buffer({ name: "test.js" });
 
-        javascript.setCode("\
-/* Note that there are a few buffers already loaded.\n\
-   You can switch through them using C-TAB or C-S-TAB.\n\
-   You can also split frames using C-x 2 or C-x 3, or\n\
-   revert to a single frame (the active one) with C-x 1.\n\
+    javascript.setCode("\
+/* Jacob O'Donnell Consulting\n\
+   Programming for 20 years\n\
+   Awesome\n\
+   What a joy\n\
  */\n\
 \n\
 function () {\n\
@@ -139,8 +139,21 @@ to the current one.\n\
         var layout = new DlLayout({ parent: dlg });
 
         var empty = new Ymacs_Buffer({ name: "empty" });
-        var ymacs = window.ymacs = new Ymacs({ buffers: [ javascript, xml, lisp, markdown, txt, keys ] });
-        ymacs.setColorTheme([ "dark", "y" ]);
+    var ymacs = window.ymacs = new Ymacs({ buffers: [ ] });
+    ymacs.setColorTheme([ "dark", "billw" ]);
+    ymacs.getActiveFrame().setStyle({ fontFamily: "Andale Mono", fontSize: "14px" });
+
+    file = 'index.js';
+    var request = new DlRPC({ url: '/code/' + file + "?killCache=" + new Date().getTime() });
+    request.call({
+        callback: function(data){
+            var code = data.text;
+            var buf = ymacs.getBuffer(file) || ymacs.createBuffer({ name: file });
+            buf.setCode(code);
+            buf.cmd("javascript_dl_mode", true);
+            ymacs.switchToBuffer(buf);
+        }
+    });
 
         try {
                 ymacs.getActiveBuffer().cmd("eval_file", ".ymacs");
@@ -148,50 +161,6 @@ to the current one.\n\
 
         var menu = new DlHMenu({});
         menu.setStyle({ marginLeft: 0, marginRight: 0 });
-
-        var item = new DlMenuItem({ parent: menu, label: "Load its own code!".makeLabel() });
-
-        var files = [
-                "ymacs.js",
-                "ymacs-keyboard.js",
-                "ymacs-regexp.js",
-                "ymacs-frame.js",
-                "ymacs-textprop.js",
-                "ymacs-exception.js",
-                "ymacs-interactive.js",
-                "ymacs-buffer.js",
-                "ymacs-marker.js",
-                "ymacs-commands.js",
-                "ymacs-commands-utils.js",
-                "ymacs-keymap.js",
-                "ymacs-keymap-emacs.js",
-                "ymacs-keymap-isearch.js",
-                "ymacs-minibuffer.js",
-                "ymacs-tokenizer.js",
-                "ymacs-mode-paren-match.js",
-                "ymacs-mode-lisp.js",
-                "ymacs-mode-js.js",
-                "ymacs-mode-xml.js",
-                "ymacs-mode-css.js",
-                "ymacs-mode-markdown.js"
-        ];
-        var submenu = new DlVMenu({});
-        item.setMenu(submenu);
-        files.foreach(function(file){
-                var item = new DlMenuItem({ label: file, parent: submenu });
-                item.addEventListener("onSelect", function(){
-                        var request = new DlRPC({ url: YMACS_SRC_PATH + file + "?killCache=" + new Date().getTime() });
-                        request.call({
-                                callback: function(data){
-                                        var code = data.text;
-                                        var buf = ymacs.getBuffer(file) || ymacs.createBuffer({ name: file });
-                                        buf.setCode(code);
-                                        buf.cmd("javascript_dl_mode", true);
-                                        ymacs.switchToBuffer(buf);
-                                }
-                        });
-                });
-        });
 
         var item = new DlMenuItem({ parent: menu, label: "Set indentation level".makeLabel() });
         item.addEventListener("onSelect", function() {
@@ -259,6 +228,4 @@ if (!is_gecko && !is_khtml) (function(){
         dlg.show(true);
 
 })();
-    ymacs.setColorTheme([ "dark", "billw" ]);
-    ymacs.getActiveFrame().setStyle({ fontFamily: "Andale Mono", fontSize: "14px" });
 });
