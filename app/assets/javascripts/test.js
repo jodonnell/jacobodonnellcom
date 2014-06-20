@@ -70,7 +70,7 @@ function Consultant() {\n\
 
 
         try {
-            ymacs.getActiveBuffer().cmd("toggle_line_numbers"); // causes an error
+            //ymacs.getActiveBuffer().cmd("toggle_line_numbers"); // causes an error
         } catch(a) {}
 
         layout.packWidget(ymacs, { pos: "bottom", fill: "*" });
@@ -109,17 +109,69 @@ function Consultant() {\n\
 
     })();
 
-    function simulateKeyPress(character) {
-        jQuery.event.trigger({ type : 'keypress', which : character.charCodeAt(0) });
+    function setTimeoutInRandom(func) {
+        var randomTime = Math.floor(Math.random() * 40) + 70;
+        setTimeout(func, randomTime);
     }
 
-    setTimeout(function () {
+    function insertChar(character) {
         var event = document.createEvent("Event");
-        //event.initKeyboardEvent("keypress", true, true, 69, false, false, false, false, 69, 0);
-        event.charCode = 69;
-        //ymacs.getActiveFrame()._on_keyPress(event);
-        //ymacs.getActiveBuffer()._handleKeyEvent({charCode: 69, ctrlKey: false, altKey: false, shiftKey: false});
-        ymacs.getActiveBuffer()._handleKeyEvent(event);
+        event.charCode = character.charCodeAt(0);
+        ymacs.getActiveFrame()._on_keyPress(event);
+    }
+    
+    function setTimeoutInsertChar(char, cb) {
+        console.log(char)
+        setTimeoutInRandom(function () {
+            insertChar(char);
+            cb();
+        });
+    }
 
-    }, 1000);    
+    function setTimeoutInsertString(string, callback) {
+        var funcs = [];
+        for (var i = 0; i < string.length; i++) {
+            (function () {
+                var currentLetter = string[i];
+                funcs.push(function(cb) {setTimeoutInsertChar(currentLetter, cb)});
+            })()
+        }
+        async.series(funcs, function () {
+            callback();				    
+        })
+    }
+
+    function setTimeoutCommand(cmd, cb) {
+        setTimeoutInRandom(function () {
+            ymacs.getActiveBuffer().cmd(cmd);
+            cb();
+        });
+    }
+    
+    async.series([
+        function (cb) {
+            setTimeout(function () {
+                ymacs.getActiveBuffer().cmd('isearch_forward');
+                cb();
+            }, 1000);
+        }, function (cb) {
+            setTimeoutInsertChar('f', cb);
+        }, function (cb) {
+            setTimeoutInsertChar('u', cb);
+        }, function (cb) {
+            setTimeoutCommand('isearch_abort', cb);
+        }, function (cb) {
+            setTimeoutCommand('forward_line', cb);
+        }, function (cb) {
+            setTimeoutCommand('indent_line', cb);
+        }, function (cb) {
+            setTimeoutInsertString('this.name = \'Jacob\';', cb);
+        }, function (cb) {
+            setTimeoutCommand('newline', cb);
+        }, function (cb) {
+            setTimeoutCommand('indent_line', cb);
+        }, function (cb) {
+            setTimeoutInsertString('this.years_experience = 12;', cb);
+        }
+    ])
 });
