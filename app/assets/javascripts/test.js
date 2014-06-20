@@ -143,18 +143,19 @@ to the current one.\n\
     ymacs.setColorTheme([ "dark", "billw" ]);
     ymacs.getActiveFrame().setStyle({ fontFamily: "Andale Mono", fontSize: "14px" });
 
-    file = 'index.js';
-    var request = new DlRPC({ url: '/code/' + file + "?killCache=" + new Date().getTime() });
-    request.call({
-        callback: function(data){
-            var code = data.text;
-            var buf = ymacs.getBuffer(file) || ymacs.createBuffer({ name: file });
-            buf.setCode(code);
-            buf.cmd("javascript_dl_mode", true);
-            ymacs.switchToBuffer(buf);
-        }
-    });
-
+    function loadFile(file, mode) {
+        var request = new DlRPC({ url: '/code/' + file + "?killCache=" + new Date().getTime() });
+        request.call({
+            callback: function(data){
+                var code = data.text;
+                var buf = ymacs.getBuffer(file) || ymacs.createBuffer({ name: file });
+                buf.setCode(code);
+                buf.cmd(mode, true);
+                ymacs.switchToBuffer(buf);
+            }
+        });
+    }
+    loadFile('index.js', 'javascript_dl_mode');
         try {
                 ymacs.getActiveBuffer().cmd("eval_file", ".ymacs");
         } catch(ex) {}
@@ -176,20 +177,15 @@ to the current one.\n\
 
         menu.addFiller();
 
+        var item = new DlMenuItem({ parent: menu, label: "Ruby".makeLabel() });
+        item.addEventListener("onSelect", function() {
+            loadFile('ruby.rb', 'ruby_mode');
+        });
+
+    
         var item = new DlMenuItem({ parent: menu, label: "Toggle line numbers".makeLabel() });
         item.addEventListener("onSelect", function() {
                 ymacs.getActiveBuffer().cmd("toggle_line_numbers");
-        });
-
-        /* -----[ font ]----- */
-
-        var item = new DlMenuItem({ parent: menu, label: "Font family".makeLabel() });
-        var submenu = new DlVMenu({});
-        item.setMenu(submenu);
-
-        item = new DlMenuItem({ parent: submenu, label: "Default from ymacs.css" });
-        item.addEventListener("onSelect", function(){
-            ymacs.getActiveFrame().setStyle({ fontFamily: "" });
         });
 
         layout.packWidget(menu, { pos: "top" });
