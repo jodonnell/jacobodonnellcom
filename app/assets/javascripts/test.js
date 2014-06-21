@@ -119,9 +119,9 @@ function Consultant() {\n\
         event.charCode = character.charCodeAt(0);
         ymacs.getActiveFrame()._on_keyPress(event);
     }
+
     
     function setTimeoutInsertChar(char, cb) {
-        console.log(char)
         setTimeoutInRandom(function () {
             insertChar(char);
             cb();
@@ -155,9 +155,7 @@ function Consultant() {\n\
                 cb();
             }, 1000);
         }, function (cb) {
-            setTimeoutInsertChar('f', cb);
-        }, function (cb) {
-            setTimeoutInsertChar('u', cb);
+            setTimeoutInsertString('fu', cb);
         }, function (cb) {
             setTimeoutCommand('isearch_abort', cb);
         }, function (cb) {
@@ -172,6 +170,26 @@ function Consultant() {\n\
             setTimeoutCommand('indent_line', cb);
         }, function (cb) {
             setTimeoutInsertString('this.years_experience = 12;', cb);
+        }, function (cb) {
+            setTimeoutCommand('newline', cb);
+        }, function (cb) {
+            setTimeoutCommand('indent_line', cb);
+        }, function (cb) {
+            setTimeoutInsertString("this.languages = ['ruby', 'objective c', 'python', 'javascript'];", cb);
+        }, function (cb) {
+            setTimeoutCommand('end_of_buffer', cb);
+        }, function (cb) {
+            setTimeoutCommand('newline', cb);
+        }, function (cb) {
+            setTimeoutCommand('newline', cb);
+        }, function (cb) {
+            setTimeoutInsertString("Consultant.prototype = {", cb);
+        }, function (cb) {
+            setTimeoutCommand('newline', cb);
+        }, function (cb) {
+            setTimeoutCommand('newline', cb);
+        }, function (cb) {
+            setTimeoutInsertString("}", cb);
         }
     ])
 });
