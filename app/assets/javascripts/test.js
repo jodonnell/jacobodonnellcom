@@ -110,7 +110,7 @@ function Consultant() {\n\
     })();
 
     function setTimeoutInRandom(func) {
-        var randomTime = Math.floor(Math.random() * 40) + 70;
+        var randomTime = Math.floor(Math.random() * 40) + 50;
         setTimeout(func, randomTime);
     }
 
@@ -128,7 +128,7 @@ function Consultant() {\n\
         });
     }
 
-    function setTimeoutInsertString(string, callback) {
+    function s(string, callback) {
         var funcs = [];
         for (var i = 0; i < string.length; i++) {
             (function () {
@@ -141,55 +141,57 @@ function Consultant() {\n\
         })
     }
 
-    function setTimeoutCommand(cmd, cb) {
+    function c(cmd, cb) {
         setTimeoutInRandom(function () {
             ymacs.getActiveBuffer().cmd(cmd);
             cb();
         });
     }
+
+    var commandList = [
+        "setTimeout(function () { ymacs.getActiveBuffer().cmd('isearch_forward'); cb(); }, 1000);",
+        "s('fu', cb)",
+        "c('isearch_abort', cb)",
+        "c('forward_line', cb)",
+        "c('indent_line', cb);",
+        "s('this.name = \"Jacob\";', cb);",
+        "c('newline', cb);",
+        "c('indent_line', cb);",
+        "s('this.years_experience = 12;', cb);",
+        "c('newline', cb);",
+        "c('indent_line', cb);",
+        "s('this.languages = [\"ruby\", \"objective c\", \"python\", \"javascript\"];', cb);",
+        "c('end_of_buffer', cb);",
+        "c('newline', cb);",
+        "c('newline', cb);",
+        "s('Consultant.prototype = {', cb);",
+        "c('newline', cb);",
+        "c('newline', cb);",
+        "s('}', cb);",
+        "c('backward_line', cb);",
+        "c('indent_line', cb);",
+        "s('hire: function() {', cb);",
+        "c('newline', cb);",
+        "c('indent_line', cb);",
+        "s('this.contact();', cb);",
+        "c('newline', cb);",
+        "c('indent_line', cb);",
+        "s('},', cb);",
+        "c('newline', cb);",
+        "c('indent_line', cb);",
+        "s('contact: function() {', cb);",
+        "c('newline', cb);",
+        "c('indent_line', cb);",
+        "s('new Email(\"jacobodonnell@gmail.com\");', cb)"
+    ];
+
+    var wrappedCommandList = [];
+    for (var i = 0; i < commandList.length; i++) {
+        (function() {
+            var func = commandList[i];
+            wrappedCommandList.push(function(cb) { eval(func) });
+        })();
+    }
     
-    async.series([
-        function (cb) {
-            setTimeout(function () {
-                ymacs.getActiveBuffer().cmd('isearch_forward');
-                cb();
-            }, 1000);
-        }, function (cb) {
-            setTimeoutInsertString('fu', cb);
-        }, function (cb) {
-            setTimeoutCommand('isearch_abort', cb);
-        }, function (cb) {
-            setTimeoutCommand('forward_line', cb);
-        }, function (cb) {
-            setTimeoutCommand('indent_line', cb);
-        }, function (cb) {
-            setTimeoutInsertString('this.name = \'Jacob\';', cb);
-        }, function (cb) {
-            setTimeoutCommand('newline', cb);
-        }, function (cb) {
-            setTimeoutCommand('indent_line', cb);
-        }, function (cb) {
-            setTimeoutInsertString('this.years_experience = 12;', cb);
-        }, function (cb) {
-            setTimeoutCommand('newline', cb);
-        }, function (cb) {
-            setTimeoutCommand('indent_line', cb);
-        }, function (cb) {
-            setTimeoutInsertString("this.languages = ['ruby', 'objective c', 'python', 'javascript'];", cb);
-        }, function (cb) {
-            setTimeoutCommand('end_of_buffer', cb);
-        }, function (cb) {
-            setTimeoutCommand('newline', cb);
-        }, function (cb) {
-            setTimeoutCommand('newline', cb);
-        }, function (cb) {
-            setTimeoutInsertString("Consultant.prototype = {", cb);
-        }, function (cb) {
-            setTimeoutCommand('newline', cb);
-        }, function (cb) {
-            setTimeoutCommand('newline', cb);
-        }, function (cb) {
-            setTimeoutInsertString("}", cb);
-        }
-    ])
+    async.series(wrappedCommandList);
 });
