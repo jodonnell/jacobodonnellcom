@@ -13,3 +13,38 @@
  *= require_tree .
  *= require_self
  */
+
+video#bgvid {
+		position: fixed; right: 0; bottom: 0;
+		min-width: 100%; min-height: 100%;
+		width: auto; height: auto; z-index: -100;
+		background: url(code.jpg) no-repeat;
+		background-size: cover;
+}
+
+body {
+  .content {
+    div {
+      padding: 10px;
+      font-family: helvetica;
+    }
+
+    width: 600px;
+    margin: 0 auto;
+    margin-top: 350px;
+    background-color: rgba(1, 1, 1, 0.8);
+    text-align: center;
+
+    .link {
+      font-size: 40px;
+      color: white;
+    }
+    a, a:hover, a:active, a:visited { color: white; }
+
+    
+    .title {
+      font-size: 40px;
+      color: white;
+    }
+  }
+}

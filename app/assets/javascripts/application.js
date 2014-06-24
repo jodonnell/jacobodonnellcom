@@ -12,7 +12,4 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require dynarchlib
-//= require ymacs.min
-//= require async
-//= require test
+//= require_tree .
