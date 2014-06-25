@@ -22,18 +22,23 @@ video#bgvid {
 		background-size: cover;
 }
 
+@font-face {
+  font-family: QuicksandRegular;
+  src: url("fonts/quicksand/Quicksand-Regular.otf") format("opentype");
+}
+
 body {
   .content {
+    margin-left: 50px;
+
     div {
       padding: 10px;
-      font-family: helvetica;
+      font-family: QuicksandRegular;
     }
 
-    width: 600px;
-    margin: 0 auto;
-    margin-top: 350px;
+    width: 800px;
+    margin-top: 450px;
     background-color: rgba(1, 1, 1, 0.8);
-    text-align: center;
 
     .link {
       font-size: 40px;
