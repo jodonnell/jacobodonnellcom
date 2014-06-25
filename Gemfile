@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+ruby "2.1.1"
+
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.1'
@@ -36,3 +38,5 @@ gem 'spring',        group: :development
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
+
+gem 'rails_12factor', group: :production
