@@ -1,0 +1,19 @@
+{
+    "name": "lol",
+    "version": "0.0.1",
+    "private": true,
+    "scripts": {
+        "start": "node app.js",
+        "test": "mocha",
+        "autotest": "./node_modules/.bin/supervisor -q -n exit -x ./node_modules/.bin/mocha -- -b"
+    },
+    "dependencies": {
+        "mocha": "1.20.x",
+        "expect.js": "0.3.1",
+        "lodash": "latest",
+        "supervisor": "~0.5.2"
+    },
+    "engines": {
+        "node": "0.10.28"
+    }
+}
