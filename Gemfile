@@ -1,9 +1,9 @@
 source 'https://rubygems.org'
 
-ruby "2.1.1"
+ruby "2.2.0"
 
 
-gem 'rails', '4.1.1'
+gem 'rails', '4.2.0'
 # Use SCSS for stylesheets
 gem 'pg'
 gem 'sass-rails', '~> 4.0.3'
