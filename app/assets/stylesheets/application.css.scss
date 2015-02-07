@@ -23,8 +23,10 @@ video#bgvid {
 }
 
 @font-face {
-  font-family: QuicksandRegular;
-  src: url("fonts/quicksand/Quicksand-Regular.otf") format("opentype");
+  font-family: 'QuicksandRegular';
+  src: font-url("Quicksand-Regular.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
 }
 
 body {
